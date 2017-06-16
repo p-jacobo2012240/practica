@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  div(class="row")
+    div(class="page-header")
+      h2 Contactos
+  div(class="row")
+    div(class="col-md-10")
+      h2 Lista de Contactos
+      table(class="table table-hover")
+        thead
+          tr
+            th Apellido
+            th Nombre
+            th Direccion
+            th Telefono
+            th Correo
+            th Categoria
+        tbody(data-bind="foreach: contactos")
+          tr
+            td(data-bind="text: apellido")
+            td(data-bind="text: nombre")
+            td(data-bind="text: direccion")
+            td(data-bind="text: telefono")
+            td(data-bind="text: correo")
+            td(data-bind="text: nombreCategoria")
+            
+  include footer
+  script(src="/javascripts/contactoCliente.js")
+            
