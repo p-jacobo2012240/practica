@@ -1,22 +1,17 @@
 var express = require('express');
-var Autenticacion = require('../helper/autenticacion');
 var router = express.Router();
-var auth = new Autenticacion();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  auth.autorizar(req);
-  res.render(auth.getPath() + 'index');
+  res.render('index', { title: 'Express' });
 });
 
-router.get('/cookie/clear', function(req, res) {
-  res.clearCookie('nick');
-  res.clearCookie('idUsuario');
-  res.end("Se eliminaron las cookies");
+router.get('/grupos', function(req, res, next) {
+  res.render('grupos', { title: 'Grupo' });
 });
 
-router.get('/cookie/all', function(req, res) {
-  res.status(200).send(req.cookies);
+router.get('/cursos', function(req, res, next) {
+  res.render('cursos', { title: 'Cursos' });
 });
 
 module.exports = router;

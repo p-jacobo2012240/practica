@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-06-2017 a las 19:44:11
+-- Tiempo de generación: 18-06-2017 a las 06:17:20
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -24,13 +24,25 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `P_Curso` (IN `c_nombre` VARCHAR(10))  BEGIN
-    INSERT INTO Curso(c_nombre) VALUE (nombreCurso);
-    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `P_addCurso` (IN `_nombre` VARCHAR(50))  BEGIN
+	DECLARE _cursoExiste VARCHAR(50);
+	SET _cursoExiste = (SELECT Count(*) FROM Curso WHERE nombreCurso = _nombre);
+	
+	IF(_cursoExiste = 0) THEN
+		INSERT INTO Curso(nombreCurso) VALUES (_nombre);
+	END IF;
+	select * from Curso;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `P_Grupo` (IN `g_nomgru` VARCHAR(10))  BEGIN
-    INSERT INTO grupo(g_nomgru) VALUE (nombreGrupo);
-    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `P_addGrupo` (IN `_nombre` VARCHAR(50))  BEGIN
+	DECLARE _grupoExiste VARCHAR(50);
+	SET _grupoExiste = (SELECT Count(*) FROM Grupo WHERE nombreGrupo = _nombre);
+	
+	IF(_grupoExiste = 0) THEN
+		INSERT INTO Grupo(nombreGrupo) VALUES (_nombre);		
+	END IF;
+	select * from Grupo;
+END$$
 
 DELIMITER ;
 
@@ -42,19 +54,27 @@ DELIMITER ;
 
 CREATE TABLE `curso` (
   `idCurso` int(11) NOT NULL,
-  `nombreCurso` varchar(20) NOT NULL
+  `nombreCurso` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `curso`
+--
+
+INSERT INTO `curso` (`idCurso`, `nombreCurso`) VALUES
+(1, 'Idioma'),
+(2, 'quimica');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detallecurso`
+-- Estructura de tabla para la tabla `detallehorario`
 --
 
-CREATE TABLE `detallecurso` (
-  `idDetalleCurso` int(11) NOT NULL,
-  `idGrupo` int(11) NOT NULL,
-  `idCurso` int(11) NOT NULL
+CREATE TABLE `detallehorario` (
+  `idDetalle` int(11) NOT NULL,
+  `idGrupo` int(30) NOT NULL,
+  `idCurso` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -65,20 +85,15 @@ CREATE TABLE `detallecurso` (
 
 CREATE TABLE `grupo` (
   `idGrupo` int(11) NOT NULL,
-  `nombreGrupo` varchar(20) NOT NULL,
-  `idCurso` int(11) NOT NULL
+  `nombreGrupo` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `horario`
+-- Volcado de datos para la tabla `grupo`
 --
 
-CREATE TABLE `horario` (
-  `idHorario` int(11) NOT NULL,
-  `hora` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `grupo` (`idGrupo`, `nombreGrupo`) VALUES
+(1, 'IN6AM');
 
 --
 -- Índices para tablas volcadas
@@ -91,10 +106,10 @@ ALTER TABLE `curso`
   ADD PRIMARY KEY (`idCurso`);
 
 --
--- Indices de la tabla `detallecurso`
+-- Indices de la tabla `detallehorario`
 --
-ALTER TABLE `detallecurso`
-  ADD PRIMARY KEY (`idDetalleCurso`),
+ALTER TABLE `detallehorario`
+  ADD PRIMARY KEY (`idDetalle`),
   ADD KEY `idGrupo` (`idGrupo`),
   ADD KEY `idCurso` (`idCurso`);
 
@@ -102,14 +117,7 @@ ALTER TABLE `detallecurso`
 -- Indices de la tabla `grupo`
 --
 ALTER TABLE `grupo`
-  ADD PRIMARY KEY (`idGrupo`),
-  ADD KEY `idCurso` (`idCurso`);
-
---
--- Indices de la tabla `horario`
---
-ALTER TABLE `horario`
-  ADD PRIMARY KEY (`idHorario`);
+  ADD PRIMARY KEY (`idGrupo`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -119,38 +127,27 @@ ALTER TABLE `horario`
 -- AUTO_INCREMENT de la tabla `curso`
 --
 ALTER TABLE `curso`
-  MODIFY `idCurso` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- AUTO_INCREMENT de la tabla `detallecurso`
+-- AUTO_INCREMENT de la tabla `detallehorario`
 --
-ALTER TABLE `detallecurso`
-  MODIFY `idDetalleCurso` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `detallehorario`
+  MODIFY `idDetalle` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `grupo`
 --
 ALTER TABLE `grupo`
-  MODIFY `idGrupo` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `horario`
---
-ALTER TABLE `horario`
-  MODIFY `idHorario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idGrupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `detallecurso`
+-- Filtros para la tabla `detallehorario`
 --
-ALTER TABLE `detallecurso`
-  ADD CONSTRAINT `detallecurso_ibfk_1` FOREIGN KEY (`idGrupo`) REFERENCES `grupo` (`idGrupo`),
-  ADD CONSTRAINT `detallecurso_ibfk_2` FOREIGN KEY (`idCurso`) REFERENCES `curso` (`idCurso`);
-
---
--- Filtros para la tabla `grupo`
---
-ALTER TABLE `grupo`
-  ADD CONSTRAINT `grupo_ibfk_1` FOREIGN KEY (`idCurso`) REFERENCES `curso` (`idCurso`);
+ALTER TABLE `detallehorario`
+  ADD CONSTRAINT `detallehorario_ibfk_1` FOREIGN KEY (`idGrupo`) REFERENCES `grupo` (`idGrupo`),
+  ADD CONSTRAINT `detallehorario_ibfk_2` FOREIGN KEY (`idCurso`) REFERENCES `curso` (`idCurso`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

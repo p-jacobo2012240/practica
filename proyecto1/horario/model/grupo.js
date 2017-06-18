@@ -1,48 +1,43 @@
 var database = require('./database');
-var categoria = {};
+var grupo = {};
 
-categoria.selectAll = function(callback) {
+grupo.selectAll = function(callback) {
   if(database) {
-    database.query("call P_Grupo",
+    database.query("SELECT * FROM Grupo",
     function(error, resultados) {
       if(error) {
         throw error;
       } else {
         callback(null, resultados);
       }
-    });//Fin query
-  }//Fin IF
-}//FIN SelectAll
+    });
+  }
+}
 
-categoria.select = function(idCategoria, callback) {
+grupo.select = function(idGrupo, callback) {
   if(database) {
-    var sql = "call  P_GSelect";
-    database.query(sql, idCategoria,
-    function(error, resultado) {
+    var consulta = "SELECT * FROM Grupo WHERE idGrupo = ?";
+    database.query(consulta,idGrupo, function(error, resultado) {
       if(error) {
         throw error;
       } else {
         callback(null, resultado);
       }
-    });//Fin query
-  }//Fin IF
-}//FIN SelectAll
+    });
+  }
+}
 
-categoria.insert = function(data, callback) {
+grupo.insert = function(data, callback) {
   if(database) {
-    database.query("call p_Grupo", data,
-    function(error, resultado) {
+    var consulta = "CALL P_addGrupo(?)";
+    database.query(consulta, data.nombreGrupo, function(error, resultado) {
       if(error) {
         throw error;
       } else {
         callback(null, {"insertId": resultado.insertId});
       }
-    });//Fin query
-  }//Fin IF
-}//FIN SelectAll
+    });
+  }
+}
 
-
-
-
-
-module.exports = categoria;
+module.exports = grupo;

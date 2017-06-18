@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('agendain6am:server');
+var debug = require('debug')('practica:server');
 var http = require('http');
 
 /**

@@ -7,9 +7,9 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var categoriaRoute = require('./routes/categoriaRoute');
-var contactoRoute = require('./routes/contactoRoute');
-var usuarioRoute = require('./routes/usuarioRoute');
+var cursoRoute = require('./routes/cursoRoute');
+var grupoRoute = require('./routes/grupoRoute');
+
 
 var app = express();
 
@@ -24,13 +24,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/jquery', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 app.use('/knockout', express.static(path.join(__dirname, 'node_modules/knockout/build')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/', categoriaRoute);
-app.use('/', usuarioRoute);
-app.use('/', contactoRoute);
+app.use('/', cursoRoute);
+app.use('/', grupoRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -48,6 +48,11 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.listen(function() {
+	console.log("El servidor se inicio exitosamente");
+	console.log("");
 });
 
 module.exports = app;

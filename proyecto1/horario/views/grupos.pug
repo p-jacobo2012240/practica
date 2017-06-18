@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  div(class="row")
+    div(class="page-header")
+      h1 Grupos
+  div(class="row")
+    div(class="col-md-10")
+      table(class="table table-hover")
+        thead
+          tr
+            th Nombre del Grupo
+        tbody(data-bind="foreach: grupos")
+          tr
+            td(data-bind="text: nombreGrupo")
+      button(type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#modalAgregarGrupo") Agregar
+
+  div(class="modal fade" tabindex="-1" id="modalAgregarGrupo"
+         role="dialog" aria-labelledby="myModalLabel")
+      div(class="modal-dialog" role="document")
+          div(class="modal-content")
+              form(data-bind="submit: agregar")
+                  div(class="modal-header")
+                      button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                          span(aria-hidden="true")
+                      h3(class="modal-title") Grupo
+                  div(class="modal-body")
+                      div(class="form-group")
+                          label Nombre
+                          input(type="text" class="form-control" name="nombreGrupo" id="nombreGrupo" data-bind="value: grupoNuevo.nombreGrupo")
+                  div(class="modal-footer")
+                      button(type="button" class="btn btn-default" data-dismiss="modal") Cerrar
+                      button(type="submit" class="btn btn-primary") Guardar
+  include footer
+    script(src="/javascripts/grupo.js")

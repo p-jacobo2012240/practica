@@ -1,41 +1,44 @@
 var database = require('./database');
-var categoria = {};
+var curso = {};
 
-categoria.selectAll = function(callback) {
+curso.selectAll = function(callback) {
   if(database) {
-    database.query("call p_Curso",
+    database.query("SELECT * FROM Curso",
     function(error, resultados) {
       if(error) {
         throw error;
       } else {
         callback(null, resultados);
       }
-    });//Fin query
-  }//Fin IF
-}//FIN SelectAll
+    });
+  }
+}
 
-categoria.select = function(idCategoria, callback) {
+curso.select = function(idCurso, callback) {
   if(database) {
-    var sql = "call p_Cursoshow";
-    database.query(sql, idCategoria,
-    function(error, resultado) {
+    var consulta = "SELECT * FROM Curso WHERE idCurso = ?";
+    database.query(consulta,idCurso, function(error, resultado) {
       if(error) {
         throw error;
       } else {
         callback(null, resultado);
       }
-    });//Fin query
-  }//Fin IF
-}//FIN SelectAll
+    });
+  }
+}
 
-categoria.insert = function(data, callback) {
+curso.insert = function(data, callback) {
   if(database) {
-    database.query("call p_CursoAdd", data,
-    function(error, resultado) {
+    var consulta = "CALL P_addCurso(?)";
+    database.query(consulta, data.nombreCurso, function(error, resultado) {
       if(error) {
         throw error;
       } else {
         callback(null, {"insertId": resultado.insertId});
       }
-    });//Fin query
-  }//Fin IF
+    });
+  }
+}
+
+
+module.exports = curso;

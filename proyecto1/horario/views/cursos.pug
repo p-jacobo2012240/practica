@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  div(class="row")
+    div(class="page-header")
+      h1 Cursos
+  div(class="row")
+    div(class="col-md-10")
+      table(class="table table-hover")
+        thead
+          tr
+            th Nombre del Curso
+        tbody(data-bind="foreach: cursos")
+          tr
+            td(data-bind="text: nombreCurso")
+      button(type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#modalAgregarCurso") Agregar
+
+  div(class="modal fade" tabindex="-1" id="modalAgregarCurso"
+         role="dialog" aria-labelledby="myModalLabel")
+      div(class="modal-dialog" role="document")
+          div(class="modal-content")
+              form(data-bind="submit: agregar")
+                  div(class="modal-header")
+                      button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                          span(aria-hidden="true")
+                      h3(class="modal-title") Curso
+                  div(class="modal-body")
+                      div(class="form-group")
+                          label Nombre
+                          input(type="text" class="form-control" name="nombreCurso" id="nombreCurso" data-bind="value: cursoNuevo.nombreCurso")
+                  div(class="modal-footer")
+                      button(type="button" class="btn btn-default" data-dismiss="modal") Cerrar
+                      button(type="submit" class="btn btn-primary") Guardar
+  include footer
+    script(src="/javascripts/curso.js")
